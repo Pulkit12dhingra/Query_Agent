@@ -65,22 +65,84 @@ python scripts/batch_cli_demo.py
 Your database contains these tables:
 
 ### `users` table (Dimension Table)
-- `id` - User ID (primary key)
-- `name` - User's full name
-- `age` - User's age
+**Description:** Core employee information containing personal details and demographics
+**Purpose:** Stores basic employee data and serves as the primary employee dimension
+**Records:** ~100 employees
+
+| Column Name | Data Type | Null Allowed | Default | Primary Key | Description |
+|-------------|-----------|--------------|---------|-------------|-------------|
+| id          | INTEGER   | NO          | None    | YES         | Unique employee identifier (auto-increment) |
+| name        | TEXT      | YES         | None    | NO          | Full employee name (First Last format) |
+| age         | INTEGER   | YES         | None    | NO          | Employee age (range: 18-65 years) |
+
+#### Sample Data:
+```
+ID | Name             | Age
+---|------------------|----
+1  | John Smith       | 34
+2  | Jane Johnson     | 28
+3  | Michael Williams | 45
+```
 
 ### `departments` table (Dimension Table)
-- `dept_id` - Department ID (primary key)
-- `dept_name` - Department name
-- `budget` - Department budget
+**Description:** Organizational structure containing department information and management details
+**Purpose:** Defines company departments with location, budget, and leadership information
+**Records:** 8 departments
+
+| Column Name | Data Type | Null Allowed | Default | Primary Key | Description |
+|-------------|-----------|--------------|---------|-------------|-------------|
+| dept_id     | INTEGER   | NO          | None    | YES         | Unique department identifier (auto-increment) |
+| dept_name   | TEXT      | NO          | None    | NO          | Department name (unique) |
+| dept_head   | TEXT      | YES         | None    | NO          | Name of department head/manager |
+| location    | TEXT      | YES         | None    | NO          | Physical building location |
+| budget      | INTEGER   | YES         | None    | NO          | Annual department budget in USD |
+
+#### Department Breakdown:
+```
+Dept ID | Department Name        | Head             | Location  | Budget
+--------|------------------------|------------------|-----------|----------
+1       | Engineering            | Sarah Wilson     | Building A| $500,000
+2       | Marketing              | Michael Brown    | Building B| $200,000
+3       | Sales                  | Jessica Davis    | Building B| $300,000
+4       | Human Resources        | David Garcia     | Building C| $150,000
+5       | Finance                | Emily Johnson    | Building C| $250,000
+6       | Operations             | Chris Martinez   | Building A| $180,000
+7       | Customer Support       | Amanda Rodriguez | Building D| $120,000
+8       | Research & Development | Matthew Lopez    | Building A| $400,000
+```
 
 ### `employee_records` table (Fact Table)
-- `id` - Record ID (primary key)
-- `user_id` - Foreign key to users table
-- `dept_id` - Foreign key to departments table
-- `salary` - Employee salary
-- `performance_score` - Performance rating (1.0 - 5.0)
-- `hire_date` - Date of hire
+**Description:** Central fact table connecting employees to departments with performance and compensation metrics
+**Purpose:** Stores transactional employee data for analytics and reporting
+**Records:** ~100 records (one per employee)
+
+| Column Name       | Data Type | Null Allowed | Default | Primary Key | Foreign Key | Description |
+|-------------------|-----------|--------------|---------|-------------|-------------|-------------|
+| record_id         | INTEGER   | NO          | None    | YES         | NO          | Unique record identifier (auto-increment) |
+| user_id           | INTEGER   | YES         | None    | NO          | YES         | References users.id - links to employee |
+| dept_id           | INTEGER   | YES         | None    | NO          | YES         | References departments.dept_id - department assignment |
+| hire_date         | DATE      | YES         | None    | NO          | NO          | Employee start date (YYYY-MM-DD format) |
+| salary            | INTEGER   | YES         | None    | NO          | NO          | Annual salary in USD (whole dollars) |
+| performance_score | REAL      | YES         | None    | NO          | NO          | Performance rating (1.0-5.0 scale) |
+| hours_worked      | INTEGER   | YES         | None    | NO          | NO          | Monthly hours worked (120-200 range) |
+
+#### Foreign Key Relationships:
+- `user_id` → `users.id` (Many-to-One: Multiple records can reference same user)
+- `dept_id` → `departments.dept_id` (Many-to-One: Multiple employees per department)
+
+#### Salary Ranges by Department:
+```
+Department             | Base Salary | Typical Range
+-----------------------|-------------|---------------
+Engineering            | $85,000     | $70,000-$110,000
+Marketing              | $55,000     | $40,000-$80,000
+Sales                  | $60,000     | $45,000-$85,000
+Human Resources        | $65,000     | $50,000-$90,000
+Finance                | $70,000     | $55,000-$95,000
+Operations             | $58,000     | $43,000-$83,000
+Customer Support       | $45,000     | $30,000-$70,000
+Research & Development | $90,000     | $75,000-$115,000
+```
 
 ## Query Examples
 
@@ -286,6 +348,38 @@ tail -f logs/agent_pipeline.log
 
 # Enable debug logging in config.py
 LOG_LEVEL = "DEBUG"
+
+# Run with verbose output
+python -m agent_pipeline.cli.main "your query" --verbose
+```
+
+## Database Documentation
+
+The RAG system uses detailed database documentation located in `data/data_documentation.txt`. This file contains:
+- Complete database schema with table relationships
+- Column descriptions and business rules
+- Sample data patterns and constraints
+- Query optimization guidelines
+
+This documentation is automatically loaded by the RAG system to provide context for SQL generation.
+
+## Project Structure
+
+```
+query_automation/
+├── src/agent_pipeline/          # Main application code
+│   ├── agent/                   # SQL generation and validation
+│   ├── cli/                     # Command-line interface
+│   ├── db/                      # Database connection and execution
+│   ├── llms/                    # LLM client wrapper
+│   ├── orchestration/           # Pipeline orchestration
+│   └── rag/                     # Document retrieval system
+├── tests/                       # Comprehensive test suite
+├── data/                        # Database and documentation
+│   ├── Employee_Information.db  # SQLite database
+│   └── data_documentation.txt   # Schema documentation (used by RAG)
+├── query.py                     # Simple query wrapper script
+└── main.py                      # Basic usage example
 ```
 
 ## Performance Considerations
@@ -297,12 +391,6 @@ LOG_LEVEL = "DEBUG"
 - **Retry Logic**: Intelligent retry mechanisms for failed operations
 
 ## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
 
 ### Development Setup
 
@@ -318,6 +406,148 @@ black src/ tests/
 
 # Check code quality
 flake8 src/ tests/
+```
+
+### Development Workflow
+
+1. **Create Feature Branch**
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Make Changes**
+   - Write code following project conventions
+   - Add tests for new functionality
+   - Update documentation as needed
+
+3. **Run Local Checks** (Optional - auto-runs on commit)
+   ```bash
+   # Run all pre-commit hooks
+   uv run pre-commit run --all-files
+
+   # Run specific checks
+   uv run ruff check . --fix
+   uv run ruff format .
+   uv run python -m pytest tests/ -v
+   ```
+
+4. **Commit Changes**
+   ```bash
+   git add .
+   git commit -m "feat: add new feature"
+   # Pre-commit hooks run automatically
+   ```
+
+5. **Push and Create PR**
+   ```bash
+   git push origin feature/your-feature-name
+   # Create pull request on GitHub
+   # CI pipeline runs automatically
+   ```
+
+### CI/CD Pipeline
+
+The CI pipeline consists of 5 main jobs that run in parallel:
+
+#### 1. **Test Job** (`test`)
+- **Purpose**: Core testing and validation
+- **Runs on**: Ubuntu Latest with Python 3.13
+- **Steps**:
+  - Checkout code
+  - Set up Python and uv package manager
+  - Install dependencies with `uv sync --dev`
+  - Run Ruff linting: `uv run ruff check . --exclude "*.ipynb"`
+  - Check formatting: `uv run ruff format --check . --exclude "*.ipynb"`
+  - Run pytest tests: `uv run python -m pytest tests/ -v --tb=short`
+  - Check file formatting (trailing whitespace, newlines)
+
+#### 2. **Lint and Format Job** (`lint-and-format`)
+- **Purpose**: Run pre-commit hooks
+- **Steps**:
+  - Install dependencies
+  - Run all pre-commit hooks: `uv run pre-commit run --all-files --show-diff-on-failure`
+
+#### 3. **Security Job** (`security`)
+- **Purpose**: Security vulnerability scanning
+- **Steps**:
+  - Run Ruff security checks: `uv run ruff check . --select=S --exclude "*.ipynb"`
+
+#### 4. **Type Check Job** (`type-check`)
+- **Purpose**: Static type checking (optional)
+- **Steps**:
+  - Install mypy
+  - Run type checking: `uv run mypy src/ --ignore-missing-imports --no-strict-optional`
+  - Set to `continue-on-error: true` (non-blocking)
+
+#### 5. **Coverage Job** (`coverage`)
+- **Purpose**: Test coverage reporting
+- **Steps**:
+  - Install coverage tools
+  - Run tests with coverage: `uv run coverage run -m pytest tests/`
+  - Generate reports: `uv run coverage report --show-missing`
+  - Upload to Codecov
+
+### Quality Standards
+
+#### Code Quality
+- **Linting**: Ruff with strict rules (pycodestyle, Pyflakes, isort, etc.)
+- **Formatting**: Consistent code formatting with Ruff
+- **Type Hints**: Encouraged but not enforced (mypy runs as advisory)
+
+#### Testing
+- **Coverage**: Aim for >80% test coverage
+- **Test Types**: Unit tests, integration tests, and end-to-end tests
+- **Test Data**: Use fixtures and mocks to ensure reproducible tests
+
+#### Security
+- **Security Scanning**: Automated security checks with Ruff
+- **Dependency Management**: Regular dependency updates with uv
+
+#### Documentation
+- **Code Documentation**: Docstrings for all public functions/classes
+- **README**: Keep README.md updated with latest setup instructions
+- **Changelog**: Update for significant changes
+
+### Troubleshooting CI Issues
+
+#### Common Failures
+
+**Linting Failures**
+```bash
+# Fix locally
+uv run ruff check . --fix
+uv run ruff format .
+git add .
+git commit -m "fix: resolve linting issues"
+```
+
+**Test Failures**
+```bash
+# Run tests locally
+uv run python -m pytest tests/ -v --tb=long
+
+# Debug specific test
+uv run python -m pytest tests/test_specific.py::test_function -vvv
+```
+
+**Coverage Issues**
+```bash
+# Generate coverage report
+uv run coverage run -m pytest tests/
+uv run coverage report --show-missing
+
+# View HTML report
+uv run coverage html
+open htmlcov/index.html
+```
+
+**Pre-commit Hook Failures**
+```bash
+# Update pre-commit hooks
+uv run pre-commit autoupdate
+
+# Run specific hook
+uv run pre-commit run ruff --all-files
 ```
 
 ## Dependencies
