@@ -1,7 +1,7 @@
 # Query Automation Agent Pipeline
 
-[![CI](https://github.com/username/query_automation/workflows/CI/badge.svg)](https://github.com/username/query_automation/actions)
-[![codecov](https://codecov.io/gh/username/query_automation/branch/main/graph/badge.svg)](https://codecov.io/gh/username/query_automation)
+[![CI](https://github.com/Pulkit12dhingra/Query_Agent/workflows/CI/badge.svg)](https://github.com/Pulkit12dhingra/Query_Agent/actions)
+[![codecov](https://codecov.io/gh/Pulkit12dhingra/Query_Agent/branch/main/graph/badge.svg)](https://codecov.io/gh/Pulkit12dhingra/Query_Agent)
 
 An intelligent SQL query automation system that converts natural language questions into SQL queries and executes them against your database. Built with Python, LangChain, Ollama, and SQLite.
 
