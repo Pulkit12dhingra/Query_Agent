@@ -36,6 +36,11 @@ push: lint test
 	if [ -z "$$(echo $${msg} | tr -d "[:space:]")" ]; then \
 	  echo "Commit message cannot be blank or whitespace."; exit 1; \
 	fi; \
+	uv run pre-commit run --all-files || { \
+	  echo "Pre-commit hooks failed. Files have been fixed. Please re-run make push."; \
+	  exit 1; \
+	}; \
+	git add .; \
 	git commit -m "$${msg}"; \
 	git push; \
 }'
