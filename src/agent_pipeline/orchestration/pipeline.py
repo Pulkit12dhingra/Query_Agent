@@ -65,9 +65,8 @@ def run_query_pipeline(
     Returns:
         List of StepResult objects containing the pipeline execution results
     """
-    if auto_initialize:
-        if not initialize_pipeline():
-            raise RuntimeError("Pipeline initialization failed")
+    if auto_initialize and not initialize_pipeline():
+        raise RuntimeError("Pipeline initialization failed")
 
     if engine is None:
         engine = get_engine()

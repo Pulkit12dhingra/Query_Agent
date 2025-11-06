@@ -100,9 +100,11 @@ class TestLLMCalls:
             Mock(content="Success after retry"),
         ]
 
-        with patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm):
-            with patch("time.sleep"):  # Skip actual sleep in tests
-                response = call_llm("System prompt", "User prompt", max_retries=2)
+        with (
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+            patch("time.sleep"),  # Skip actual sleep in tests
+        ):
+            response = call_llm("System prompt", "User prompt", max_retries=2)
 
         assert response == "Success after retry"
         assert mock_llm.invoke.call_count == 2
@@ -111,10 +113,12 @@ class TestLLMCalls:
         """Test LLM call when all retries are exhausted."""
         mock_llm.invoke.side_effect = Exception("Read timed out")
 
-        with patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm):
-            with patch("time.sleep"):  # Skip actual sleep in tests
-                with pytest.raises(TimeoutError, match="failed to respond after .* attempts"):
-                    call_llm("System prompt", "User prompt", max_retries=2)
+        with (
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+            patch("time.sleep"),  # Skip actual sleep in tests
+            pytest.raises(TimeoutError, match="failed to respond after .* attempts"),
+        ):
+            call_llm("System prompt", "User prompt", max_retries=2)
 
         assert mock_llm.invoke.call_count == 2
 
@@ -122,9 +126,11 @@ class TestLLMCalls:
         """Test LLM call with non-timeout error (should not retry)."""
         mock_llm.invoke.side_effect = ValueError("Invalid input")
 
-        with patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm):
-            with pytest.raises(ValueError, match="Invalid input"):
-                call_llm("System prompt", "User prompt", max_retries=3)
+        with (
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+            pytest.raises(ValueError, match="Invalid input"),
+        ):
+            call_llm("System prompt", "User prompt", max_retries=3)
 
         assert mock_llm.invoke.call_count == 1  # Should not retry
 
@@ -132,10 +138,12 @@ class TestLLMCalls:
         """Test LLM call with custom retry count."""
         mock_llm.invoke.side_effect = Exception("timeout")
 
-        with patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm):
-            with patch("time.sleep"):
-                with pytest.raises(TimeoutError):
-                    call_llm("System prompt", "User prompt", max_retries=5)
+        with (
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+            patch("time.sleep"),
+            pytest.raises(TimeoutError),
+        ):
+            call_llm("System prompt", "User prompt", max_retries=5)
 
         assert mock_llm.invoke.call_count == 5
 
@@ -143,10 +151,12 @@ class TestLLMCalls:
         """Test LLM call uses default retry count from config."""
         mock_llm.invoke.side_effect = Exception("timeout")
 
-        with patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm):
-            with patch("time.sleep"):
-                with pytest.raises(TimeoutError):
-                    call_llm("System prompt", "User prompt")  # No max_retries specified
+        with (
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+            patch("time.sleep"),
+            pytest.raises(TimeoutError),
+        ):
+            call_llm("System prompt", "User prompt")  # No max_retries specified
 
         assert mock_llm.invoke.call_count == LLM_MAX_RETRIES
 
@@ -235,9 +245,11 @@ class TestLLMPerformance:
         # First call fails, second succeeds
         mock_llm.invoke.side_effect = [Exception("timeout"), Mock(content="Success")]
 
-        with patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm):
-            with patch("time.sleep") as mock_sleep:
-                call_llm("System", "User", max_retries=2)
+        with (
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+            patch("time.sleep") as mock_sleep,
+        ):
+            call_llm("System", "User", max_retries=2)
 
         # Should sleep between retries
         mock_sleep.assert_called_once_with(5)

@@ -14,10 +14,10 @@ sys.path.insert(0, str(Path(__file__).parent.parent / "src"))
 
 def run_cli_command(command, description):
     """Run a CLI command and display results."""
-    print(f"\n{'='*60}")
+    print(f"\n{'=' * 60}")
     print(f" {description}")
     print(f" Command: {command}")
-    print(f"{'='*60}")
+    print(f"{'=' * 60}")
 
     try:
         # Split command for subprocess

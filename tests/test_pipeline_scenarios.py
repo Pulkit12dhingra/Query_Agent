@@ -70,24 +70,26 @@ class TestBasicPipelineScenarios:
 
     def test_simple_query_success(self, temp_db, sample_step_result):
         """Test simple query execution with successful result."""
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                # Mock successful agent execution
-                mock_run_agent.return_value = [sample_step_result]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            # Mock successful agent execution
+            mock_run_agent.return_value = [sample_step_result]
 
-                results = run_query_pipeline(
-                    "Show all users", engine=temp_db, auto_initialize=False
-                )
+            results = run_query_pipeline("Show all users", engine=temp_db, auto_initialize=False)
 
-                assert len(results) == 1
-                assert results[0].error is None
-                assert results[0].result_df is not None
+            assert len(results) == 1
+            assert results[0].error is None
+            assert results[0].result_df is not None
 
     def test_query_with_initialization_failure(self, temp_db):
         """Test query execution when initialization fails."""
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=False):
-            with pytest.raises(RuntimeError, match="Pipeline initialization failed"):
-                run_query_pipeline("Show all users", engine=temp_db)
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=False),
+            pytest.raises(RuntimeError, match="Pipeline initialization failed"),
+        ):
+            run_query_pipeline("Show all users", engine=temp_db)
 
     def test_query_with_agent_failure(self, temp_db):
         """Test query execution when agent fails."""
@@ -99,14 +101,16 @@ class TestBasicPipelineScenarios:
             error="SQL execution failed",
         )
 
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = [failed_result]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = [failed_result]
 
-                results = run_query_pipeline("Invalid query", engine=temp_db, auto_initialize=False)
+            results = run_query_pipeline("Invalid query", engine=temp_db, auto_initialize=False)
 
-                assert len(results) == 1
-                assert results[0].error is not None
+            assert len(results) == 1
+            assert results[0].error is not None
 
     def test_multi_step_query_success(self, temp_db):
         """Test multi-step query execution."""
@@ -128,17 +132,17 @@ class TestBasicPipelineScenarios:
             error=None,
         )
 
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = [step1, step2]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = [step1, step2]
 
-                results = run_query_pipeline(
-                    "Multi-step query", engine=temp_db, auto_initialize=False
-                )
+            results = run_query_pipeline("Multi-step query", engine=temp_db, auto_initialize=False)
 
-                assert len(results) == 2
-                assert all(r.error is None for r in results)
-                assert all(r.result_df is not None for r in results)
+            assert len(results) == 2
+            assert all(r.error is None for r in results)
+            assert all(r.result_df is not None for r in results)
 
 
 class TestComplexPipelineScenarios:
@@ -163,17 +167,19 @@ class TestComplexPipelineScenarios:
             error="SQL syntax error",
         )
 
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = [step1, step2]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = [step1, step2]
 
-                results = run_query_pipeline(
-                    "Mixed success/failure query", engine=temp_db, auto_initialize=False
-                )
+            results = run_query_pipeline(
+                "Mixed success/failure query", engine=temp_db, auto_initialize=False
+            )
 
-                assert len(results) == 2
-                assert results[0].error is None
-                assert results[1].error is not None
+            assert len(results) == 2
+            assert results[0].error is None
+            assert results[1].error is not None
 
     def test_empty_result_handling(self, temp_db):
         """Test pipeline handling when query returns no results."""
@@ -186,17 +192,19 @@ class TestComplexPipelineScenarios:
             error=None,
         )
 
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = [empty_result]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = [empty_result]
 
-                results = run_query_pipeline(
-                    "Query with no results", engine=temp_db, auto_initialize=False
-                )
+            results = run_query_pipeline(
+                "Query with no results", engine=temp_db, auto_initialize=False
+            )
 
-                assert len(results) == 1
-                assert results[0].error is None
-                assert len(results[0].result_df) == 0
+            assert len(results) == 1
+            assert results[0].error is None
+            assert len(results[0].result_df) == 0
 
     def test_large_result_set_handling(self, temp_db):
         """Test pipeline handling of large result sets."""
@@ -214,17 +222,19 @@ class TestComplexPipelineScenarios:
             error=None,
         )
 
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = [large_result]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = [large_result]
 
-                results = run_query_pipeline(
-                    "Query with large results", engine=temp_db, auto_initialize=False
-                )
+            results = run_query_pipeline(
+                "Query with large results", engine=temp_db, auto_initialize=False
+            )
 
-                assert len(results) == 1
-                assert results[0].error is None
-                assert len(results[0].result_df) == 1000
+            assert len(results) == 1
+            assert results[0].error is None
+            assert len(results[0].result_df) == 1000
 
 
 class TestPipelineResultHandling:
@@ -279,37 +289,41 @@ class TestPipelineParameterHandling:
 
     def test_custom_parameters(self, temp_db):
         """Test pipeline with custom parameters."""
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = []
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = []
 
-                run_query_pipeline(
-                    "Test query",
-                    engine=temp_db,
-                    max_steps=6,
-                    per_step_retries=3,
-                    auto_initialize=False,
-                )
+            run_query_pipeline(
+                "Test query",
+                engine=temp_db,
+                max_steps=6,
+                per_step_retries=3,
+                auto_initialize=False,
+            )
 
-                # Verify parameters were passed through
-                mock_run_agent.assert_called_once()
-                call_args = mock_run_agent.call_args[1]
-                assert call_args["max_steps"] == 6
-                assert call_args["per_step_retries"] == 3
+            # Verify parameters were passed through
+            mock_run_agent.assert_called_once()
+            call_args = mock_run_agent.call_args[1]
+            assert call_args["max_steps"] == 6
+            assert call_args["per_step_retries"] == 3
 
     def test_default_parameters(self, temp_db):
         """Test pipeline with default parameters."""
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.return_value = []
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.return_value = []
 
-                run_query_pipeline("Test query", engine=temp_db, auto_initialize=False)
+            run_query_pipeline("Test query", engine=temp_db, auto_initialize=False)
 
-                # Verify default parameters were used (None passed through)
-                mock_run_agent.assert_called_once()
-                call_args = mock_run_agent.call_args[1]
-                assert call_args.get("max_steps") is None
-                assert call_args.get("per_step_retries") is None
+            # Verify default parameters were used (None passed through)
+            mock_run_agent.assert_called_once()
+            call_args = mock_run_agent.call_args[1]
+            assert call_args.get("max_steps") is None
+            assert call_args.get("per_step_retries") is None
 
 
 class TestPipelineErrorHandling:
@@ -317,24 +331,28 @@ class TestPipelineErrorHandling:
 
     def test_agent_exception_handling(self, temp_db):
         """Test pipeline handling when agent raises exception."""
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                mock_run_agent.side_effect = Exception("Agent execution failed")
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+        ):
+            mock_run_agent.side_effect = Exception("Agent execution failed")
 
-                with pytest.raises(Exception, match="Agent execution failed"):
-                    run_query_pipeline("Test query", engine=temp_db, auto_initialize=False)
+            with pytest.raises(Exception, match="Agent execution failed"):
+                run_query_pipeline("Test query", engine=temp_db, auto_initialize=False)
 
     def test_pipeline_logging(self, temp_db, sample_step_result):
         """Test that pipeline operations are properly logged."""
-        with patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True):
-            with patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent:
-                with patch("agent_pipeline.orchestration.pipeline.log_and_print") as mock_log:
-                    mock_run_agent.return_value = [sample_step_result]
+        with (
+            patch("agent_pipeline.orchestration.pipeline.initialize_pipeline", return_value=True),
+            patch("agent_pipeline.orchestration.pipeline.run_agent") as mock_run_agent,
+            patch("agent_pipeline.orchestration.pipeline.log_and_print") as mock_log,
+        ):
+            mock_run_agent.return_value = [sample_step_result]
 
-                    run_query_pipeline("Test query", engine=temp_db, auto_initialize=False)
+            run_query_pipeline("Test query", engine=temp_db, auto_initialize=False)
 
-                    # Should have logged start and completion
-                    assert mock_log.call_count >= 2
-                    log_messages = [call[0][0] for call in mock_log.call_args_list]
-                    assert any("Starting query pipeline" in msg for msg in log_messages)
-                    assert any("Pipeline completed" in msg for msg in log_messages)
+            # Should have logged start and completion
+            assert mock_log.call_count >= 2
+            log_messages = [call[0][0] for call in mock_log.call_args_list]
+            assert any("Starting query pipeline" in msg for msg in log_messages)
+            assert any("Pipeline completed" in msg for msg in log_messages)

@@ -7,6 +7,7 @@ from unittest.mock import patch
 
 import pandas as pd
 import pytest
+from sqlalchemy.exc import SQLAlchemyError
 
 # Add src to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -93,7 +94,7 @@ class TestSQLExecution:
         """Test SQL execution with invalid syntax."""
         sql = "INVALID SQL QUERY"
 
-        with pytest.raises(Exception):
+        with pytest.raises(SQLAlchemyError):
             execute_sql(temp_db, sql)
 
     def test_execute_sql_clean_formatting(self, temp_db):
@@ -174,11 +175,11 @@ class TestDatabaseIntegration:
     def test_database_error_handling(self, temp_db):
         """Test database error handling."""
         # Test table doesn't exist
-        with pytest.raises(Exception):
+        with pytest.raises(SQLAlchemyError):
             execute_sql(temp_db, "SELECT * FROM nonexistent_table")
 
         # Test invalid column
-        with pytest.raises(Exception):
+        with pytest.raises(SQLAlchemyError):
             execute_sql(temp_db, "SELECT nonexistent_column FROM users")
 
     def test_concurrent_database_access(self, temp_db):

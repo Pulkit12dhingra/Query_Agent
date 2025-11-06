@@ -17,8 +17,8 @@ repos:
     hooks:
       - id: pytest
         name: Run pytest tests
-        entry: bash
-        args: [-c, 'cd /Users/pulkit/Desktop/test/query_automation && python -m pytest tests/ -v --tb=short']
+        entry: uv
+        args: [run, python, -m, pytest, tests/, -v, --tb=short]
         language: system
         pass_filenames: false
         always_run: true

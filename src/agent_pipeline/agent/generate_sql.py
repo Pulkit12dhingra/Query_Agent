@@ -13,7 +13,7 @@ def generate_sql_for_subtask(subtask_text: str, prior_sql: list[str], user_reque
     """Generate SQL for a specific subtask using LLM with schema context and prior steps."""
     schema_ctx = retrieve_schema_context(user_request + "\n\n" + subtask_text)
     prior = (
-        "\n\n".join([f"-- Step {i+1}\n{q}" for i, q in enumerate(prior_sql)])
+        "\n\n".join([f"-- Step {i + 1}\n{q}" for i, q in enumerate(prior_sql)])
         if prior_sql
         else "(none)"
     )

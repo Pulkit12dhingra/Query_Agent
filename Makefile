@@ -3,16 +3,16 @@
 .PHONY: format requirements lint test commit push
 
 format:
-	ruff format .
+	uv run ruff format .
 
 requirements:
 	uv pip compile pyproject.toml --no-reuse-hashes --output-file=requirements.txt
 
 lint:
-	ruff check . --exclude notebooks
+	uv run ruff check . --exclude "*.ipynb"
 
 test:
-	pytest
+	uv run pytest tests/
 
 commit: format requirements lint test
 	@bash -c '{ \

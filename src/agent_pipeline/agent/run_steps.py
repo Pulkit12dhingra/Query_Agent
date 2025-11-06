@@ -68,7 +68,7 @@ def plan_subtasks(user_request: str, max_steps: int = None) -> list[tuple[str, s
         steps = [("Single-step query", "Directly produce the final answer in one query.")]
 
     print(f"[PLANNING] Generated {len(steps)} steps:")
-    for i, (title, desc) in enumerate(steps, 1):
+    for i, (title, _desc) in enumerate(steps, 1):
         print(f"[PLANNING]   Step {i}: {title}")
 
     return steps[:max_steps]

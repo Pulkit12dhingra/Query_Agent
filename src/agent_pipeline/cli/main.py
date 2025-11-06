@@ -5,11 +5,18 @@
 from pathlib import Path
 import sys
 
-# Add src to Python path
-project_root = Path(__file__).parent.parent.parent.parent
-sys.path.insert(0, str(project_root / "src"))
 
-from agent_pipeline.orchestration.pipeline import (
+def setup_path():
+    """Add src to Python path before importing local modules."""
+    project_root = Path(__file__).parent.parent.parent.parent
+    if str(project_root / "src") not in sys.path:
+        sys.path.insert(0, str(project_root / "src"))
+
+
+# Setup path before imports
+setup_path()
+
+from agent_pipeline.orchestration.pipeline import (  # noqa: E402
     get_final_result,
     initialize_pipeline,
     run_query_pipeline,
