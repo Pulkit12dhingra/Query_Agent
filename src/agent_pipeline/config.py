@@ -41,3 +41,14 @@ RAG_CHUNK_OVERLAP = 100
 RAG_SEPARATORS = ["\n\n", "\n", " ", ""]
 RAG_SEARCH_K = 6  # Number of chunks to retrieve
 EMBEDDINGS_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
+
+# HuggingFace Configuration (Alternative to Ollama)
+# Uncomment and set USE_HUGGINGFACE = True to use HuggingFace models instead of Ollama
+# USE_HUGGINGFACE = False
+# HF_MODEL_NAME = "microsoft/DialoGPT-medium"  # Lightweight option
+# HF_MODEL_NAME = "codellama/CodeLlama-7b-Instruct-hf"  # Better for SQL/code
+# HF_MODEL_NAME = "WizardLM/WizardCoder-Python-7B-V1.0"  # Python/SQL focused
+# HF_DEVICE = "auto"  # "auto", "cuda", "cpu"
+# HF_MAX_NEW_TOKENS = 1024
+# HF_TEMPERATURE = 0.2
+# HF_TOP_P = 0.9
