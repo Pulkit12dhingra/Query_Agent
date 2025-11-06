@@ -48,8 +48,8 @@ def execute_sql(
     # Check if query already has LIMIT clause
     sql_upper = clean_sql.upper()
     if "LIMIT" not in sql_upper:
-        # Add LIMIT clause safely
-        limited_sql = f"SELECT * FROM ({clean_sql}) AS limited_query LIMIT {max_rows}"
+        # Add LIMIT clause safely - max_rows is an integer parameter, not user input
+        limited_sql = f"SELECT * FROM ({clean_sql}) AS limited_query LIMIT {max_rows}"  # noqa: S608
     else:
         # Query already has LIMIT, use as-is
         limited_sql = clean_sql

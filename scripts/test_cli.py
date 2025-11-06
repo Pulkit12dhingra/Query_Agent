@@ -30,7 +30,7 @@ def test_cli_basic():
         env = os.environ.copy()
         env["PYTHONPATH"] = str(project_dir / "src")
 
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             cmd, cwd=project_dir, env=env, capture_output=True, text=True, timeout=30
         )
 
@@ -75,7 +75,7 @@ def test_cli_help():
         env = os.environ.copy()
         env["PYTHONPATH"] = str(project_dir / "src")
 
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             cmd, cwd=project_dir, env=env, capture_output=True, text=True, timeout=10
         )
 

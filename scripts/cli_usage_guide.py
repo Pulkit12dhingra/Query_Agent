@@ -20,10 +20,10 @@ def run_cli_command(command, description):
     print(f"{'=' * 60}")
 
     try:
-        # Split command for subprocess
+        # Split command for subprocess - commands are hardcoded and safe
         cmd_parts = command.split()
-        result = subprocess.run(
-            cmd_parts, capture_output=True, text=True, cwd=Path(__file__).parent.parent
+        result = subprocess.run(  # noqa: S603
+            cmd_parts, capture_output=True, text=True, cwd=Path(__file__).parent.parent, shell=False
         )
 
         if result.returncode == 0:

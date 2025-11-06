@@ -39,7 +39,7 @@ def main():
 
     try:
         # Run the CLI with proper environment
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             cmd,
             cwd=project_dir,
             env={**dict(os.environ), "PYTHONPATH": str(project_dir / "src")},

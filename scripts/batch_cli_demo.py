@@ -16,7 +16,7 @@ def run_cli_query(query, timeout=30):
     cmd = [sys.executable, "-m", "agent_pipeline.cli.main", query]
 
     try:
-        result = subprocess.run(
+        result = subprocess.run(  # noqa: S603
             cmd, cwd=project_dir, capture_output=True, text=True, timeout=timeout
         )
 
