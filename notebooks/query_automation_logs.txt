@@ -1,0 +1,243 @@
+2025-11-06 05:08:28,289 - INFO -
+================================================================================
+2025-11-06 05:08:28,290 - INFO - STARTING COMPREHENSIVE QUERY AUTOMATION TESTING
+2025-11-06 05:08:28,291 - INFO - Test session started at: 2025-11-06 05:08:28
+2025-11-06 05:08:28,291 - INFO - Log file: /Users/pulkit/Desktop/test/query_automation/notebooks/query_automation_logs.txt
+2025-11-06 05:08:28,291 - INFO - ================================================================================
+2025-11-06 05:08:28,291 - INFO -
+--------------------------------------------------
+2025-11-06 05:08:28,292 - INFO - Executing: Basic Joins
+2025-11-06 05:08:28,293 - INFO - --------------------------------------------------
+2025-11-06 05:08:28,293 - INFO -
+================================================================================
+2025-11-06 05:08:28,293 - INFO - TEST CASE 1: Basic Query with Joins
+2025-11-06 05:08:28,294 - INFO - ================================================================================
+2025-11-06 05:08:28,294 - INFO - Testing query: Show average salary by department with employee count and department head.
+2025-11-06 05:08:28,294 - INFO - ==================================================
+2025-11-06 05:10:28,357 - ERROR - UNEXPECTED ERROR: HTTPConnectionPool(host='localhost', port=11434): Read timed out.
+2025-11-06 05:10:28,419 - INFO - Completed: Basic Joins - FAILED
+2025-11-06 05:10:28,423 - INFO - Moving to next test case...
+2025-11-06 05:10:28,425 - INFO -
+--------------------------------------------------
+2025-11-06 05:10:28,427 - INFO - Executing: Complex CTEs
+2025-11-06 05:10:28,429 - INFO - --------------------------------------------------
+2025-11-06 05:10:28,429 - INFO -
+================================================================================
+2025-11-06 05:10:28,429 - INFO - TEST CASE 2: Complex Query with Multiple Joins and CTEs
+2025-11-06 05:10:28,431 - INFO - ================================================================================
+2025-11-06 05:10:28,431 - INFO - Testing query: Create a comprehensive employee performance report showing: 1) Employee name, department, and salary 2) Performance ranking within their department 3) Salary comparison to department average 4) Years of service since hire date 5) Only include employees with above-average performance (>3.5) 6) Sort by department and performance score descending
+2025-11-06 05:10:28,432 - INFO - ==================================================
+2025-11-06 05:13:14,324 - INFO -
+SUMMARY:
+2025-11-06 05:13:14,335 - INFO - Step 1: SUCCESS
+2025-11-06 05:13:14,335 - INFO - Step 2: SUCCESS
+2025-11-06 05:13:14,335 - INFO - Step 3: SUCCESS
+2025-11-06 05:13:14,336 - INFO - Test completed: 3/3 steps successful
+2025-11-06 05:13:14,339 - INFO - Completed: Complex CTEs - SUCCESS
+2025-11-06 05:13:14,339 - INFO - Moving to next test case...
+2025-11-06 05:13:14,339 - INFO -
+--------------------------------------------------
+2025-11-06 05:13:14,340 - INFO - Executing: Recursive CTEs
+2025-11-06 05:13:14,340 - INFO - --------------------------------------------------
+2025-11-06 05:13:14,341 - INFO -
+================================================================================
+2025-11-06 05:13:14,341 - INFO - TEST CASE 3: Advanced Query with Multiple CTEs and Recursive Logic
+2025-11-06 05:13:14,342 - INFO - ================================================================================
+2025-11-06 05:13:14,342 - INFO - Testing query: Generate an organizational hierarchy analysis: 1) Create department hierarchy showing budget allocation 2) Calculate cumulative salary costs by department 3) Identify departments with budget variance (over/under spending) 4) Show department efficiency metrics (avg performance per salary dollar) 5) Create recursive calculation of department cost centers 6) Include employee growth projections based on performance trends
+2025-11-06 05:13:14,342 - INFO - ==================================================
+2025-11-06 05:15:14,414 - ERROR - UNEXPECTED ERROR: HTTPConnectionPool(host='localhost', port=11434): Read timed out.
+2025-11-06 05:15:14,571 - INFO - Completed: Recursive CTEs - FAILED
+2025-11-06 05:15:14,575 - INFO - Moving to next test case...
+2025-11-06 05:15:14,576 - INFO -
+--------------------------------------------------
+2025-11-06 05:15:14,578 - INFO - Executing: Window Functions
+2025-11-06 05:15:14,580 - INFO - --------------------------------------------------
+2025-11-06 05:15:14,580 - INFO -
+================================================================================
+2025-11-06 05:15:14,582 - INFO - TEST CASE 4: Advanced Analytics with Window Functions and Partitions
+2025-11-06 05:15:14,586 - INFO - ================================================================================
+2025-11-06 05:15:14,589 - INFO - Testing query: Create advanced workforce analytics dashboard: 1) Calculate running totals of salary costs by department and hire date 2) Rank employees by performance within each department using DENSE_RANK 3) Calculate moving averages of performance scores over time 4) Identify salary percentiles (25th, 50th, 75th, 95th) by department 5) Calculate year-over-year growth in department headcount 6) Use LAG/LEAD functions to compare performance trends 7) Partition data by location and calculate location-based metrics
+2025-11-06 05:15:14,595 - INFO - ==================================================
+2025-11-06 05:17:14,702 - ERROR - UNEXPECTED ERROR: HTTPConnectionPool(host='localhost', port=11434): Read timed out.
+2025-11-06 05:17:14,827 - INFO - Completed: Window Functions - FAILED
+2025-11-06 05:17:14,832 - INFO - Moving to next test case...
+2025-11-06 05:17:14,834 - INFO -
+================================================================================
+2025-11-06 05:17:14,835 - INFO - TEST SESSION COMPLETED
+2025-11-06 05:17:14,836 - INFO - ================================================================================
+2025-11-06 05:17:14,838 - INFO - Session ended at: 2025-11-06 05:17:14
+2025-11-06 05:17:14,839 - INFO - Total duration: 0:08:46.545809
+2025-11-06 05:17:14,840 - INFO -
+FINAL RESULTS:
+2025-11-06 05:17:14,841 - INFO -   ✗ Basic Joins: FAILED
+2025-11-06 05:17:14,841 - INFO -   ✓ Complex CTEs: SUCCESS
+2025-11-06 05:17:14,845 - INFO -   ✗ Recursive CTEs: FAILED
+2025-11-06 05:17:14,849 - INFO -   ✗ Window Functions: FAILED
+2025-11-06 05:17:14,851 - INFO -
+Overall: 1/4 tests successful
+2025-11-06 05:17:14,855 - INFO - Success rate: 25.0%
+2025-11-06 05:17:14,856 - INFO - ================================================================================
+
+2025-11-06 05:29:31,176 - INFO -
+================================================================================
+2025-11-06 05:29:31,180 - INFO - STARTING COMPREHENSIVE QUERY AUTOMATION TESTING
+2025-11-06 05:29:31,180 - INFO - Test session started at: 2025-11-06 05:29:31
+2025-11-06 05:29:31,180 - INFO - Log file: /Users/pulkit/Desktop/test/query_automation/notebooks/query_automation_logs.txt
+2025-11-06 05:29:31,181 - INFO - ================================================================================
+2025-11-06 05:29:31,181 - INFO -
+--------------------------------------------------
+2025-11-06 05:29:31,181 - INFO - Executing: Basic Joins
+2025-11-06 05:29:31,182 - INFO - --------------------------------------------------
+2025-11-06 05:29:31,182 - INFO -
+================================================================================
+2025-11-06 05:29:31,182 - INFO - TEST CASE 1: Basic Query with Joins
+2025-11-06 05:29:31,183 - INFO - ================================================================================
+2025-11-06 05:29:31,183 - INFO - Testing query: Show average salary by department with employee count and department head.
+2025-11-06 05:29:31,183 - INFO - ==================================================
+2025-11-06 05:31:31,249 - ERROR - UNEXPECTED ERROR: Operation timed out after 120 seconds
+2025-11-06 05:31:31,335 - INFO - Completed: Basic Joins - FAILED
+2025-11-06 05:31:31,341 - INFO - Moving to next test case...
+2025-11-06 05:31:31,342 - INFO -
+--------------------------------------------------
+2025-11-06 05:31:31,342 - INFO - Executing: Complex CTEs
+2025-11-06 05:31:31,343 - INFO - --------------------------------------------------
+2025-11-06 05:31:31,345 - INFO -
+================================================================================
+2025-11-06 05:31:31,346 - INFO - TEST CASE 2: Complex Query with Multiple Joins and CTEs
+2025-11-06 05:31:31,348 - INFO - ================================================================================
+2025-11-06 05:31:31,350 - INFO - Testing query: Create a comprehensive employee performance report showing: 1) Employee name, department, and salary 2) Performance ranking within their department 3) Salary comparison to department average 4) Years of service since hire date 5) Only include employees with above-average performance (>3.5) 6) Sort by department and performance score descending
+2025-11-06 05:31:31,354 - INFO - ==================================================
+2025-11-06 05:33:31,435 - ERROR - UNEXPECTED ERROR: Operation timed out after 120 seconds
+2025-11-06 05:33:31,475 - INFO - Completed: Complex CTEs - FAILED
+2025-11-06 05:33:31,478 - INFO - Moving to next test case...
+2025-11-06 05:33:31,479 - INFO -
+--------------------------------------------------
+2025-11-06 05:33:31,479 - INFO - Executing: Recursive CTEs
+2025-11-06 05:33:31,480 - INFO - --------------------------------------------------
+2025-11-06 05:33:31,481 - INFO -
+================================================================================
+2025-11-06 05:33:31,482 - INFO - TEST CASE 3: Advanced Query with Multiple CTEs and Recursive Logic
+2025-11-06 05:33:31,482 - INFO - ================================================================================
+2025-11-06 05:33:31,485 - INFO - Testing query: Generate an organizational hierarchy analysis: 1) Create department hierarchy showing budget allocation 2) Calculate cumulative salary costs by department 3) Identify departments with budget variance (over/under spending) 4) Show department efficiency metrics (avg performance per salary dollar) 5) Create recursive calculation of department cost centers 6) Include employee growth projections based on performance trends
+2025-11-06 05:33:31,485 - INFO - ==================================================
+2025-11-06 05:35:31,689 - ERROR - UNEXPECTED ERROR: Operation timed out after 120 seconds
+2025-11-06 05:35:31,756 - INFO - Completed: Recursive CTEs - FAILED
+2025-11-06 05:35:31,766 - INFO - Moving to next test case...
+2025-11-06 05:35:31,769 - INFO -
+--------------------------------------------------
+2025-11-06 05:35:31,769 - INFO - Executing: Window Functions
+2025-11-06 05:35:31,777 - INFO - --------------------------------------------------
+2025-11-06 05:35:31,777 - INFO -
+================================================================================
+2025-11-06 05:35:31,778 - INFO - TEST CASE 4: Advanced Analytics with Window Functions and Partitions
+2025-11-06 05:35:31,782 - INFO - ================================================================================
+2025-11-06 05:35:31,782 - INFO - Testing query: Create advanced workforce analytics dashboard: 1) Calculate running totals of salary costs by department and hire date 2) Rank employees by performance within each department using DENSE_RANK 3) Calculate moving averages of performance scores over time 4) Identify salary percentiles (25th, 50th, 75th, 95th) by department 5) Calculate year-over-year growth in department headcount 6) Use LAG/LEAD functions to compare performance trends 7) Partition data by location and calculate location-based metrics
+2025-11-06 05:35:31,785 - INFO - ==================================================
+2025-11-06 05:37:31,978 - ERROR - UNEXPECTED ERROR: Operation timed out after 120 seconds
+2025-11-06 05:37:32,153 - INFO - Completed: Window Functions - FAILED
+2025-11-06 05:37:32,165 - INFO - Moving to next test case...
+2025-11-06 05:37:32,169 - INFO -
+================================================================================
+2025-11-06 05:37:32,173 - INFO - TEST SESSION COMPLETED
+2025-11-06 05:37:32,179 - INFO - ================================================================================
+2025-11-06 05:37:32,182 - INFO - Session ended at: 2025-11-06 05:37:32
+2025-11-06 05:37:32,186 - INFO - Total duration: 0:08:00.993638
+2025-11-06 05:37:32,187 - INFO -
+FINAL RESULTS:
+2025-11-06 05:37:32,190 - INFO -   ✗ Basic Joins: FAILED
+2025-11-06 05:37:32,195 - INFO -   ✗ Complex CTEs: FAILED
+2025-11-06 05:37:32,199 - INFO -   ✗ Recursive CTEs: FAILED
+2025-11-06 05:37:32,203 - INFO -   ✗ Window Functions: FAILED
+2025-11-06 05:37:32,205 - INFO -
+Overall: 0/4 tests successful
+2025-11-06 05:37:32,208 - INFO - Success rate: 0.0%
+2025-11-06 05:37:32,209 - INFO - ================================================================================
+
+2025-11-06 06:24:18,967 - INFO -
+================================================================================
+2025-11-06 06:24:18,974 - INFO - STARTING COMPREHENSIVE QUERY AUTOMATION TESTING
+2025-11-06 06:24:18,975 - INFO - Test session started at: 2025-11-06 06:24:18
+2025-11-06 06:24:18,976 - INFO - Log file: /Users/pulkit/Desktop/test/query_automation/notebooks/query_automation_logs.txt
+2025-11-06 06:24:18,976 - INFO - ================================================================================
+2025-11-06 06:24:18,977 - INFO -
+--------------------------------------------------
+2025-11-06 06:24:18,977 - INFO - Executing: Basic Joins
+2025-11-06 06:24:18,977 - INFO - --------------------------------------------------
+2025-11-06 06:24:18,978 - INFO -
+================================================================================
+2025-11-06 06:24:18,978 - INFO - TEST CASE 1: Basic Query with Joins
+2025-11-06 06:24:18,978 - INFO - ================================================================================
+2025-11-06 06:24:18,979 - INFO - Testing query: Show average salary by department with employee count and department head.
+2025-11-06 06:24:18,979 - INFO - ==================================================
+2025-11-06 06:25:30,976 - INFO -
+SUMMARY:
+2025-11-06 06:25:31,010 - INFO - Step 1: SUCCESS
+2025-11-06 06:25:31,011 - INFO - Step 2: SUCCESS
+2025-11-06 06:25:31,011 - INFO - Test completed: 2/2 steps successful
+2025-11-06 06:25:31,012 - INFO - Completed: Basic Joins - SUCCESS
+2025-11-06 06:25:31,013 - INFO - Moving to next test case...
+2025-11-06 06:25:31,013 - INFO -
+--------------------------------------------------
+2025-11-06 06:25:31,013 - INFO - Executing: Complex CTEs
+2025-11-06 06:25:31,014 - INFO - --------------------------------------------------
+2025-11-06 06:25:31,015 - INFO -
+================================================================================
+2025-11-06 06:25:31,015 - INFO - TEST CASE 2: Complex Query with Multiple Joins and CTEs
+2025-11-06 06:25:31,015 - INFO - ================================================================================
+2025-11-06 06:25:31,015 - INFO - Testing query: Create a comprehensive employee performance report showing: 1) Employee name, department, and salary 2) Performance ranking within their department 3) Salary comparison to department average 4) Years of service since hire date 5) Only include employees with above-average performance (>3.5) 6) Sort by department and performance score descending
+2025-11-06 06:25:31,015 - INFO - ==================================================
+2025-11-06 06:27:53,693 - INFO -
+SUMMARY:
+2025-11-06 06:27:53,710 - INFO - Step 1: SUCCESS
+2025-11-06 06:27:53,711 - INFO - Step 2: SUCCESS
+2025-11-06 06:27:53,711 - INFO - Step 3: SUCCESS
+2025-11-06 06:27:53,711 - INFO - Test completed: 3/3 steps successful
+2025-11-06 06:27:53,713 - INFO - Completed: Complex CTEs - SUCCESS
+2025-11-06 06:27:53,714 - INFO - Moving to next test case...
+2025-11-06 06:27:53,714 - INFO -
+--------------------------------------------------
+2025-11-06 06:27:53,715 - INFO - Executing: Recursive CTEs
+2025-11-06 06:27:53,717 - INFO - --------------------------------------------------
+2025-11-06 06:27:53,717 - INFO -
+================================================================================
+2025-11-06 06:27:53,717 - INFO - TEST CASE 3: Advanced Query with Multiple CTEs and Recursive Logic
+2025-11-06 06:27:53,718 - INFO - ================================================================================
+2025-11-06 06:27:53,718 - INFO - Testing query: Generate an organizational hierarchy analysis: 1) Create department hierarchy showing budget allocation 2) Calculate cumulative salary costs by department 3) Identify departments with budget variance (over/under spending) 4) Show department efficiency metrics (avg performance per salary dollar) 5) Create recursive calculation of department cost centers 6) Include employee growth projections based on performance trends
+2025-11-06 06:27:53,719 - INFO - ==================================================
+2025-11-06 06:30:53,995 - INFO -
+SUMMARY:
+2025-11-06 06:30:54,034 - INFO - Step 1: SUCCESS
+2025-11-06 06:30:54,035 - INFO - Step 2: SUCCESS
+2025-11-06 06:30:54,035 - INFO - Step 3: SUCCESS
+2025-11-06 06:30:54,036 - INFO - Test completed: 3/3 steps successful
+2025-11-06 06:30:54,039 - INFO - Completed: Recursive CTEs - SUCCESS
+2025-11-06 06:30:54,042 - INFO - Moving to next test case...
+2025-11-06 06:30:54,043 - INFO -
+--------------------------------------------------
+2025-11-06 06:30:54,043 - INFO - Executing: Window Functions
+2025-11-06 06:30:54,046 - INFO - --------------------------------------------------
+2025-11-06 06:30:54,047 - INFO -
+================================================================================
+2025-11-06 06:30:54,049 - INFO - TEST CASE 4: Advanced Analytics with Window Functions and Partitions
+2025-11-06 06:30:54,050 - INFO - ================================================================================
+2025-11-06 06:30:54,050 - INFO - Testing query: Create advanced workforce analytics dashboard: 1) Calculate running totals of salary costs by department and hire date 2) Rank employees by performance within each department using DENSE_RANK 3) Calculate moving averages of performance scores over time 4) Identify salary percentiles (25th, 50th, 75th, 95th) by department 5) Calculate year-over-year growth in department headcount 6) Use LAG/LEAD functions to compare performance trends 7) Partition data by location and calculate location-based metrics
+2025-11-06 06:30:54,051 - INFO - ==================================================
+2025-11-06 06:32:54,207 - ERROR - UNEXPECTED ERROR: Operation timed out after 120 seconds
+2025-11-06 06:32:54,286 - INFO - Completed: Window Functions - FAILED
+2025-11-06 06:32:54,310 - INFO - Moving to next test case...
+2025-11-06 06:32:54,311 - INFO -
+================================================================================
+2025-11-06 06:32:54,312 - INFO - TEST SESSION COMPLETED
+2025-11-06 06:32:54,314 - INFO - ================================================================================
+2025-11-06 06:32:54,316 - INFO - Session ended at: 2025-11-06 06:32:54
+2025-11-06 06:32:54,317 - INFO - Total duration: 0:08:35.345312
+2025-11-06 06:32:54,318 - INFO -
+FINAL RESULTS:
+2025-11-06 06:32:54,318 - INFO -   [SUCCESS] Basic Joins: SUCCESS
+2025-11-06 06:32:54,320 - INFO -   [SUCCESS] Complex CTEs: SUCCESS
+2025-11-06 06:32:54,324 - INFO -   [SUCCESS] Recursive CTEs: SUCCESS
+2025-11-06 06:32:54,324 - INFO -   [FAILED] Window Functions: FAILED
+2025-11-06 06:32:54,328 - INFO -
+Overall: 3/4 tests successful
+2025-11-06 06:32:54,337 - INFO - Success rate: 75.0%
+2025-11-06 06:32:54,338 - INFO - ================================================================================

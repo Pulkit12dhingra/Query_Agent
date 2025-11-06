@@ -1,0 +1,164 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+
+    - name: Lint with Ruff
+      run: |
+        uv run ruff check . --exclude "*.ipynb"
+
+    - name: Check formatting with Ruff
+      run: |
+        uv run ruff format --check . --exclude "*.ipynb"
+
+    - name: Run tests with pytest
+      run: |
+        uv run python -m pytest tests/ -v --tb=short
+
+    - name: Check trailing whitespace and file endings
+      run: |
+        # Check for trailing whitespace (excluding notebooks)
+        if grep -r --include="*.py" --include="*.yaml" --include="*.yml" --include="*.md" --include="*.txt" '[[:space:]]$' . ; then
+          echo "Found trailing whitespace"
+          exit 1
+        fi
+
+        # Check for files not ending with newline (excluding notebooks)
+        for file in $(find . -name "*.py" -o -name "*.yaml" -o -name "*.yml" -o -name "*.md" -o -name "*.txt" | grep -v ".ipynb"); do
+          if [ -s "$file" ] && [ -z "$(tail -c1 "$file")" ]; then
+            continue
+          elif [ -s "$file" ]; then
+            echo "File $file does not end with newline"
+            exit 1
+          fi
+        done
+
+  lint-and-format:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Install dependencies
+      run: uv sync --dev
+
+    - name: Run pre-commit hooks
+      run: |
+        uv run pre-commit run --all-files --show-diff-on-failure
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Install dependencies
+      run: uv sync --dev
+
+    - name: Run security checks with Ruff
+      run: |
+        uv run ruff check . --select=S --exclude "*.ipynb"
+
+  type-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+        uv add --dev mypy
+
+    - name: Type check with mypy
+      run: |
+        uv run mypy src/ --ignore-missing-imports --no-strict-optional
+      continue-on-error: true  # Allow this to fail for now
+
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.13"
+
+    - name: Install uv
+      uses: astral-sh/setup-uv@v3
+      with:
+        version: "latest"
+
+    - name: Install dependencies
+      run: |
+        uv sync --dev
+        uv add --dev coverage[toml]
+
+    - name: Run tests with coverage
+      run: |
+        uv run coverage run -m pytest tests/
+        uv run coverage report --show-missing
+        uv run coverage xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false

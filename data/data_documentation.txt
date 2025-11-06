@@ -1,0 +1,203 @@
+# Employee Information Database Documentation
+
+## Database Overview
+**Database Name:** Employee_Information.db
+**Database Type:** SQLite3
+**Schema Type:** Star Schema
+**Total Tables:** 3
+**Purpose:** Employee management system with departmental organization and performance tracking
+
+## Schema Architecture
+This database implements a star schema design with:
+- 2 Dimension Tables (users, departments)
+- 1 Fact Table (employee_records)
+- Central hub for analytics and reporting
+
+## Table Definitions
+
+### 1. USERS (Dimension Table)
+**Description:** Core employee information containing personal details and demographics
+**Purpose:** Stores basic employee data and serves as the primary employee dimension
+**Records:** ~100 employees
+
+#### Column Details:
+| Column Name | Data Type | Null Allowed | Default | Primary Key | Description |
+|-------------|-----------|--------------|---------|-------------|-------------|
+| id          | INTEGER   | NO          | None    | YES         | Unique employee identifier (auto-increment) |
+| name        | TEXT      | YES         | None    | NO          | Full employee name (First Last format) |
+| age         | INTEGER   | YES         | None    | NO          | Employee age (range: 18-65 years) |
+
+#### Business Rules:
+- Primary key auto-increments for new employees
+- Names are generated from predefined first/last name lists
+- Age range represents working-age population (18-65)
+- No constraints on name uniqueness (allows duplicate names)
+
+#### Sample Data:
+```
+ID | Name             | Age
+---|------------------|----
+1  | John Smith       | 34
+2  | Jane Johnson     | 28
+3  | Michael Williams | 45
+4  | Sarah Brown      | 31
+5  | David Jones      | 52
+```
+
+---
+
+### 2. DEPARTMENTS (Dimension Table)
+**Description:** Organizational structure containing department information and management details
+**Purpose:** Defines company departments with location, budget, and leadership information
+**Records:** 8 departments
+
+#### Column Details:
+| Column Name | Data Type | Null Allowed | Default | Primary Key | Description |
+|-------------|-----------|--------------|---------|-------------|-------------|
+| dept_id     | INTEGER   | NO          | None    | YES         | Unique department identifier (auto-increment) |
+| dept_name   | TEXT      | NO          | None    | NO          | Department name (unique) |
+| dept_head   | TEXT      | YES         | None    | NO          | Name of department head/manager |
+| location    | TEXT      | YES         | None    | NO          | Physical building location |
+| budget      | INTEGER   | YES         | None    | NO          | Annual department budget in USD |
+
+#### Business Rules:
+- Each department has a unique identifier and name
+- Budget is stored as integer (whole dollars)
+- Location refers to building assignments (A, B, C, D)
+- Department head is the manager's full name
+
+#### Department Breakdown:
+```
+Dept ID | Department Name        | Head             | Location  | Budget
+--------|------------------------|------------------|-----------|----------
+1       | Engineering            | Sarah Wilson     | Building A| $500,000
+2       | Marketing              | Michael Brown    | Building B| $200,000
+3       | Sales                  | Jessica Davis    | Building B| $300,000
+4       | Human Resources        | David Garcia     | Building C| $150,000
+5       | Finance                | Emily Johnson    | Building C| $250,000
+6       | Operations             | Chris Martinez   | Building A| $180,000
+7       | Customer Support       | Amanda Rodriguez | Building D| $120,000
+8       | Research & Development | Matthew Lopez    | Building A| $400,000
+```
+
+---
+
+### 3. EMPLOYEE_RECORDS (Fact Table)
+**Description:** Central fact table connecting employees to departments with performance and compensation metrics
+**Purpose:** Stores transactional employee data for analytics and reporting
+**Records:** ~100 records (one per employee)
+
+#### Column Details:
+| Column Name       | Data Type | Null Allowed | Default | Primary Key | Foreign Key | Description |
+|-------------------|-----------|--------------|---------|-------------|-------------|-------------|
+| record_id         | INTEGER   | NO          | None    | YES         | NO          | Unique record identifier (auto-increment) |
+| user_id           | INTEGER   | YES         | None    | NO          | YES         | References users.id - links to employee |
+| dept_id           | INTEGER   | YES         | None    | NO          | YES         | References departments.dept_id - department assignment |
+| hire_date         | DATE      | YES         | None    | NO          | NO          | Employee start date (YYYY-MM-DD format) |
+| salary            | INTEGER   | YES         | None    | NO          | NO          | Annual salary in USD (whole dollars) |
+| performance_score | REAL      | YES         | None    | NO          | NO          | Performance rating (1.0-5.0 scale) |
+| hours_worked      | INTEGER   | YES         | None    | NO          | NO          | Monthly hours worked (120-200 range) |
+
+#### Foreign Key Relationships:
+- `user_id` → `users.id` (Many-to-One: Multiple records can reference same user)
+- `dept_id` → `departments.dept_id` (Many-to-One: Multiple employees per department)
+
+#### Business Rules:
+- Each employee has exactly one active record
+- Hire dates range from 2020-01-01 to present (last 5 years)
+- Salary varies by department with ±$15-25K variance from base
+- Performance scores use 5-point scale (2.0-5.0 actual range)
+- Hours worked represents monthly totals (typical range: 120-200)
+
+#### Salary Ranges by Department:
+```
+Department             | Base Salary | Typical Range
+-----------------------|-------------|---------------
+Engineering            | $85,000     | $70,000-$110,000
+Marketing              | $55,000     | $40,000-$80,000
+Sales                  | $60,000     | $45,000-$85,000
+Human Resources        | $65,000     | $50,000-$90,000
+Finance                | $70,000     | $55,000-$95,000
+Operations             | $58,000     | $43,000-$83,000
+Customer Support       | $45,000     | $30,000-$70,000
+Research & Development | $90,000     | $75,000-$115,000
+```
+
+#### Sample Data:
+```
+Record ID | User ID | Dept ID | Hire Date  | Salary | Performance | Hours
+----------|---------|---------|------------|--------|-------------|-------
+1         | 1       | 1       | 2022-03-15 | $87,500| 4.2         | 165
+2         | 2       | 2       | 2021-07-20 | $52,000| 3.8         | 140
+3         | 3       | 3       | 2020-11-10 | $68,000| 4.5         | 175
+```
+
+---
+
+## Indexes and Performance
+**Primary Keys:** All tables have auto-incrementing integer primary keys
+**Foreign Keys:** employee_records table maintains referential integrity
+**Query Performance:** Optimized for star schema analytics queries
+
+## Common Query Patterns
+
+### Employee Information Lookup:
+```sql
+SELECT u.name, d.dept_name, er.salary, er.performance_score
+FROM users u
+JOIN employee_records er ON u.id = er.user_id
+JOIN departments d ON er.dept_id = d.dept_id
+WHERE u.name = 'John Smith';
+```
+
+### Department Analytics:
+```sql
+SELECT d.dept_name,
+       COUNT(er.user_id) as employee_count,
+       AVG(er.salary) as avg_salary,
+       AVG(er.performance_score) as avg_performance
+FROM departments d
+LEFT JOIN employee_records er ON d.dept_id = er.dept_id
+GROUP BY d.dept_name;
+```
+
+### Performance Reporting:
+```sql
+SELECT u.name, er.performance_score, er.salary, d.dept_name
+FROM employee_records er
+JOIN users u ON er.user_id = u.id
+JOIN departments d ON er.dept_id = d.dept_id
+WHERE er.performance_score >= 4.0
+ORDER BY er.performance_score DESC;
+```
+
+## Data Quality Notes
+- All employee names are randomly generated from predefined lists
+- No duplicate checking on employee names (business decision)
+- Age distribution is uniform across 18-65 range
+- Hire dates span 5-year period (2020-2025)
+- Salary data includes realistic variance by department
+- Performance scores avoid extreme low values (minimum 2.0)
+
+## Business Metrics Available
+- Employee count by department
+- Average salary by department and overall
+- Performance distribution analysis
+- Hours worked trends
+- Hiring patterns over time
+- Budget vs actual employee costs
+- Department productivity metrics
+
+## Maintenance Notes
+- Database uses SQLite3 for simplicity and portability
+- No cascading deletes implemented (manual cleanup required)
+- Foreign key constraints enforced
+- Sample data regenerated via create_db.ipynb notebook
+- Schema supports additional fact tables for historical tracking
+
+---
+
+**Generated:** November 6, 2025
+**Database Version:** SQLite3
+**Schema Version:** 1.0
+**Contact:** Database Administrator
