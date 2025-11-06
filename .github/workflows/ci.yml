@@ -44,14 +44,14 @@ jobs:
 
     - name: Check trailing whitespace and file endings
       run: |
-        # Check for trailing whitespace (excluding notebooks)
-        if grep -r --include="*.py" --include="*.yaml" --include="*.yml" --include="*.md" --include="*.txt" '[[:space:]]$' . ; then
-          echo "Found trailing whitespace"
+        # Check for trailing whitespace (excluding notebooks and virtual environments)
+        if find . -name "*.py" -o -name "*.yaml" -o -name "*.yml" -o -name "*.md" -o -name "*.txt" | grep -v "\.ipynb$" | grep -v "\.venv/" | grep -v "__pycache__" | xargs grep -l '[[:space:]]$'; then
+          echo "Found trailing whitespace in project files"
           exit 1
         fi
 
-        # Check for files not ending with newline (excluding notebooks)
-        for file in $(find . -name "*.py" -o -name "*.yaml" -o -name "*.yml" -o -name "*.md" -o -name "*.txt" | grep -v ".ipynb"); do
+        # Check for files not ending with newline (excluding notebooks and virtual environments)
+        for file in $(find . -name "*.py" -o -name "*.yaml" -o -name "*.yml" -o -name "*.md" -o -name "*.txt" | grep -v "\.ipynb$" | grep -v "\.venv/" | grep -v "__pycache__"); do
           if [ -s "$file" ] && [ -z "$(tail -c1 "$file")" ]; then
             continue
           elif [ -s "$file" ]; then
