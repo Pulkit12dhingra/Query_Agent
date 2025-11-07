@@ -16,7 +16,7 @@ Schema context (selected excerpts):
 {schema_context}
 
 Return a list like:
-1) <title> — <what this step does>
+1) <title> - <what this step does>
 2) ...
 Keep it under {max_steps} steps if possible.
 """

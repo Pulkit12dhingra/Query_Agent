@@ -11,7 +11,7 @@ import pytest
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from agent_pipeline.config import LLM_MAX_RETRIES, LLM_TIMEOUT, MODEL_NAME
-from agent_pipeline.llms.client import call_llm, create_llm, get_llm
+from agent_pipeline.llms.client import call_huggingface_llm, call_llm, create_llm, get_llm
 
 
 class TestLLMCreation:
@@ -253,3 +253,61 @@ class TestLLMPerformance:
 
         # Should sleep between retries
         mock_sleep.assert_called_once_with(5)
+
+
+class TestHuggingFaceRouting:
+    """Ensure HuggingFace-specific paths behave as expected."""
+
+    def test_get_llm_uses_huggingface_backend(self):
+        """get_llm should instantiate HuggingFace pipeline when enabled."""
+        mock_llm = Mock()
+        with (
+            patch("agent_pipeline.llms.client.USE_HUGGINGFACE", True),
+            patch("agent_pipeline.llms.client.HF_MODEL_NAME", "hf/test-model"),
+            patch(
+                "agent_pipeline.llms.client.create_huggingface_llm",
+                return_value=mock_llm,
+            ) as mock_create_hf,
+            patch("agent_pipeline.llms.client.create_llm") as mock_create_ollama,
+        ):
+            llm = get_llm()
+
+        assert llm is mock_llm
+        mock_create_hf.assert_called_once_with("hf/test-model")
+        mock_create_ollama.assert_not_called()
+
+    def test_call_llm_routes_to_huggingface(self, mock_llm):
+        """call_llm should switch to HF prompt formatting when enabled."""
+        mock_llm.invoke.return_value = "HF response"
+
+        with (
+            patch("agent_pipeline.llms.client.USE_HUGGINGFACE", True),
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+        ):
+            response = call_llm("System prompt", "User prompt")
+
+        assert response == "HF response"
+        prompt_passed = mock_llm.invoke.call_args[0][0]
+        assert isinstance(prompt_passed, str)
+        assert "System: System prompt" in prompt_passed
+        assert "User: User prompt" in prompt_passed
+
+    def test_call_huggingface_llm_requires_flag(self):
+        """Direct HF calls should fail when the flag is disabled."""
+        with (
+            patch("agent_pipeline.llms.client.USE_HUGGINGFACE", False),
+            pytest.raises(RuntimeError, match="disabled"),
+        ):
+            call_huggingface_llm("System", "User")
+
+    def test_call_huggingface_llm_success(self, mock_llm):
+        """Direct HF calls should work when backend is enabled."""
+        mock_llm.invoke.return_value = "HF direct response"
+
+        with (
+            patch("agent_pipeline.llms.client.USE_HUGGINGFACE", True),
+            patch("agent_pipeline.llms.client.get_llm", return_value=mock_llm),
+        ):
+            response = call_huggingface_llm("System", "User")
+
+        assert response == "HF direct response"

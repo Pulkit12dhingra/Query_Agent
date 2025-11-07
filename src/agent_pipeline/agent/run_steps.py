@@ -29,7 +29,7 @@ class StepResult:
 
 def parse_numbered_list(text: str) -> list[tuple[str, str]]:
     """
-    Parse "1) Title — description" style list into [(title, desc), ...].
+    Parse "1) Title - description" style list into [(title, desc), ...].
     Quite forgiving to variations.
     """
     lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
@@ -40,7 +40,7 @@ def parse_numbered_list(text: str) -> list[tuple[str, str]]:
             continue
         body = m.group(1)
         # split on em dash or hyphen dash types
-        parts = re.split(r"\s+—\s+|\s+-\s+|:\s+", body, maxsplit=1)
+        parts = re.split(r"\s+-\s+|:\s+", body, maxsplit=1)
         if len(parts) == 2:
             steps.append((parts[0].strip(), parts[1].strip()))
         else:
@@ -97,7 +97,7 @@ def run_agent(
 
         # Generate initial SQL
         print(f"[STEP {i}] Generating initial SQL...")
-        sql = generate_sql_for_subtask(f"{title} — {desc}", prior_sql, user_request)
+        sql = generate_sql_for_subtask(f"{title} - {desc}", prior_sql, user_request)
         sr.sql = sql
         print(f"[STEP {i}] Generated SQL: {sql[:100]}...")
 
@@ -121,7 +121,7 @@ def run_agent(
                 if attempt < per_step_retries:
                     print(f"[STEP {i}] Generating corrected SQL for syntax error...")
                     corrected_sql = generate_sql_for_subtask(
-                        f"(Fix syntax error - Attempt {attempt}) {title} — {desc}. "
+                        f"(Fix syntax error - Attempt {attempt}) {title} - {desc}. "
                         f"Previous failed query: {current_sql}. "
                         f"Error: {syntax_error}",
                         prior_sql,
@@ -155,7 +155,7 @@ def run_agent(
                 if attempt < per_step_retries:
                     print(f"[STEP {i}] Generating corrected SQL for execution error...")
                     corrected_sql = generate_sql_for_subtask(
-                        f"(Fix execution error - Attempt {attempt}) {title} — {desc}. "
+                        f"(Fix execution error - Attempt {attempt}) {title} - {desc}. "
                         f"Previous failed query: {current_sql}. "
                         f"Execution error: {execution_error}",
                         prior_sql,

@@ -37,6 +37,10 @@ uv install
 # Activate virtual environment
 source .venv/bin/activate
 
+# Install the package in development mode (required for the CLI to work)
+uv pip install -e .
+# or: pip install -e .
+
 # Start Ollama (in another terminal)
 ollama serve
 
@@ -49,15 +53,18 @@ ollama list
 
 ```bash
 # Simple query wrapper (easiest)
-python scripts/query.py "Show all users"
-python scripts/query.py "Find employees with salary > 60000"
-python scripts/query.py "What's the average salary by department?"
+python query.py "Show all users"
+python query.py "Find employees with salary > 60000"
+python query.py "What's the average salary by department?"
 
 # Direct CLI usage
-PYTHONPATH=src python -m agent_pipeline.cli.main "Your question here"
+python -m agent_pipeline.cli.main "Your question here"
 
-# Interactive mode
-python scripts/batch_cli_demo.py
+# Run with HuggingFace instead of Ollama (optional)
+USE_HUGGINGFACE=true HF_MODEL_NAME=sshleifer/tiny-gpt2 python -m agent_pipeline.cli.main "Your question here"
+
+# Direct CLI usage
+python -m agent_pipeline.cli.main "Your question here"
 ```
 
 ## Database Schema
@@ -127,8 +134,8 @@ Dept ID | Department Name        | Head             | Location  | Budget
 | hours_worked      | INTEGER   | YES         | None    | NO          | NO          | Monthly hours worked (120-200 range) |
 
 #### Foreign Key Relationships:
-- `user_id` → `users.id` (Many-to-One: Multiple records can reference same user)
-- `dept_id` → `departments.dept_id` (Many-to-One: Multiple employees per department)
+- `user_id` -> `users.id` (Many-to-One: Multiple records can reference same user)
+- `dept_id` -> `departments.dept_id` (Many-to-One: Multiple employees per department)
 
 #### Salary Ranges by Department:
 ```
@@ -148,31 +155,31 @@ Research & Development | $90,000     | $75,000-$115,000
 
 ### Basic Data Retrieval
 ```bash
-python scripts/query.py "Show all users"
-python scripts/query.py "List all departments"
-python scripts/query.py "Show employee records"
+python query.py "Show all users"
+python query.py "List all departments"
+python query.py "Show employee records"
 ```
 
 ### Filtering & Searching
 ```bash
-python scripts/query.py "Find users older than 30"
-python scripts/query.py "Show employees in Engineering department"
-python scripts/query.py "Find employees with salary greater than 70000"
+python query.py "Find users older than 30"
+python query.py "Show employees in Engineering department"
+python query.py "Find employees with salary greater than 70000"
 ```
 
 ### Analytics & Aggregation
 ```bash
-python scripts/query.py "What's the average salary by department?"
-python scripts/query.py "Count employees in each department"
-python scripts/query.py "Find the highest paid employee"
-python scripts/query.py "Show salary statistics"
+python query.py "What's the average salary by department?"
+python query.py "Count employees in each department"
+python query.py "Find the highest paid employee"
+python query.py "Show salary statistics"
 ```
 
 ### Complex Queries
 ```bash
-python scripts/query.py "Find top 5 highest paid employees with their departments"
-python scripts/query.py "Show average age by department"
-python scripts/query.py "Find employees with above average salary in their department"
+python query.py "Find top 5 highest paid employees with their departments"
+python query.py "Show average age by department"
+python query.py "Find employees with above average salary in their department"
 ```
 
 ## Architecture
@@ -249,37 +256,29 @@ python -m pytest tests/test_sql_validation.py -v
 python -m pytest tests/test_pipeline_scenarios.py -v
 ```
 
-### System Testing Scripts
+### System Testing
 
 ```bash
-# Test database connection
-python scripts/test_db_connection.py
+# Run all tests
+python -m pytest tests/ -v
 
-# Test LLM connection
-python scripts/test_llm_client.py
-
-# Test RAG system
-python scripts/test_rag_system.py
-
-# Test CLI functionality
-python scripts/test_cli.py
+# Test specific components
+python -m pytest tests/test_db_execute.py -v
+python -m pytest tests/test_llm_client.py -v
+python -m pytest tests/test_sql_validation.py -v
+python -m pytest tests/test_pipeline_scenarios.py -v
 ```
 
-## Scripts Directory
+## Usage Scripts
 
-The `scripts/` directory contains various test and example scripts:
+The project includes the following usage scripts:
 
-### System Testing
-- **`test_db_connection.py`** - Database connectivity testing
-- **`test_llm_client.py`** - LLM functionality testing
-- **`test_rag_system.py`** - RAG system component testing
-- **`test_cli.py`** - CLI functionality testing
+### Main Query Interface
+- **`query.py`** - Simple query wrapper script (located in root directory)
+- **`main.py`** - Basic usage example
 
-### Usage Examples
-- **`example_pipeline_usage.py`** - Comprehensive pipeline examples
-- **`cli_usage_guide.py`** - Complete CLI usage guide
-- **`batch_cli_demo.py`** - Batch processing and interactive mode
-- **`query.py`** - Simple query wrapper script
+### Testing
+All test files are located in the `tests/` directory and can be run with pytest.
 
 ## Configuration
 
@@ -328,8 +327,8 @@ Edit `src/agent_pipeline/config.py` to modify:
 
 3. **Database errors:**
    ```bash
-   # Test database connection
-   python scripts/test_db_connection.py
+   # Test database connection with pytest
+   python -m pytest tests/test_db_execute.py -v
 
    # Check database file exists
    ls data/Employee_Information.db
@@ -378,8 +377,9 @@ query_automation/
 ├── data/                        # Database and documentation
 │   ├── Employee_Information.db  # SQLite database
 │   └── data_documentation.txt   # Schema documentation (used by RAG)
-├── query.py                     # Simple query wrapper script
-└── main.py                      # Basic usage example
+├── query.py                     # Simple query wrapper script (root level)
+├── main.py                      # Basic usage example
+└── pyproject.toml               # Project configuration
 ```
 
 ## Performance Considerations

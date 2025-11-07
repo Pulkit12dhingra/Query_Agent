@@ -130,10 +130,10 @@ def sample_step_result():
 @pytest.fixture
 def sample_planning_response():
     """Sample LLM response for task planning."""
-    return """1) Get employee data — Retrieve basic employee information
-2) Join department data — Add department names to employee records
-3) Apply filters — Filter by performance score
-4) Sort and limit — Order by salary and limit to top 10"""
+    return """1) Get employee data - Retrieve basic employee information
+2) Join department data - Add department names to employee records
+3) Apply filters - Filter by performance score
+4) Sort and limit - Order by salary and limit to top 10"""
 
 
 @pytest.fixture

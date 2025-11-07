@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "query-automation"
 version = "0.1.0"
@@ -35,6 +39,10 @@ dev = [
     "pre-commit>=4.3.0",
     "ruff>=0.14.3",
 ]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["agent_pipeline*"]
 
 # Ruff configuration for query automation project
 [tool.ruff]

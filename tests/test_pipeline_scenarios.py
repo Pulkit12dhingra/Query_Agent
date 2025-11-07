@@ -53,6 +53,28 @@ class TestPipelineInitialization:
         assert result is False
         mock_ollama_health.assert_called_once()
 
+    @patch("agent_pipeline.orchestration.pipeline.test_db_connection")
+    @patch("agent_pipeline.orchestration.pipeline.get_vectorstore")
+    @patch("agent_pipeline.orchestration.pipeline.get_retriever")
+    def test_initialize_pipeline_skips_ollama_when_using_hf(
+        self, mock_retriever, mock_vectorstore, mock_db_test
+    ):
+        """HuggingFace mode should bypass Ollama health checks."""
+        mock_db_test.return_value = ["users"]
+        mock_vectorstore.return_value = Mock()
+        mock_retriever.return_value = Mock()
+
+        with (
+            patch("agent_pipeline.orchestration.pipeline.USE_HUGGINGFACE", True),
+            patch(
+                "agent_pipeline.orchestration.pipeline.check_ollama_health"
+            ) as mock_ollama_health,
+        ):
+            result = initialize_pipeline()
+
+        assert result is True
+        mock_ollama_health.assert_not_called()
+
     @patch("agent_pipeline.orchestration.pipeline.check_ollama_health")
     @patch("agent_pipeline.orchestration.pipeline.test_db_connection")
     def test_initialize_pipeline_db_failure(self, mock_db_test, mock_ollama_health):

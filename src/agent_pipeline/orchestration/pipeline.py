@@ -5,6 +5,7 @@
 from sqlalchemy.engine import Engine
 
 from ..agent.run_steps import StepResult, run_agent
+from ..config import USE_HUGGINGFACE
 from ..db.engine import get_engine, test_db_connection
 from ..health.ollama_check import check_ollama_health
 from ..logging_utils import log_and_print
@@ -15,11 +16,14 @@ def initialize_pipeline() -> bool:
     """Initialize all pipeline components and verify they're working."""
     log_and_print("Initializing pipeline components...")
 
-    # 1. Check Ollama health
-    log_and_print("Checking Ollama health...")
-    if not check_ollama_health():
-        log_and_print("Ollama health check failed!", "error")
-        return False
+    # 1. Check Ollama health when required
+    if USE_HUGGINGFACE:
+        log_and_print("Skipping Ollama health check (HuggingFace backend enabled).")
+    else:
+        log_and_print("Checking Ollama health...")
+        if not check_ollama_health():
+            log_and_print("Ollama health check failed!", "error")
+            return False
 
     # 2. Test database connection
     log_and_print("Testing database connection...")

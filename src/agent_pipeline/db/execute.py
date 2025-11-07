@@ -1,4 +1,4 @@
-# execute_sql_with_limit()/timeouts → DataFrame
+# execute_sql_with_limit()/timeouts -> DataFrame
 
 """SQL execution utilities with timeout protection and row limits."""
 

@@ -99,13 +99,13 @@ Dept ID | Department Name        | Head             | Location  | Budget
 | hours_worked      | INTEGER   | YES         | None    | NO          | NO          | Monthly hours worked (120-200 range) |
 
 #### Foreign Key Relationships:
-- `user_id` → `users.id` (Many-to-One: Multiple records can reference same user)
-- `dept_id` → `departments.dept_id` (Many-to-One: Multiple employees per department)
+- `user_id` -> `users.id` (Many-to-One: Multiple records can reference same user)
+- `dept_id` -> `departments.dept_id` (Many-to-One: Multiple employees per department)
 
 #### Business Rules:
 - Each employee has exactly one active record
 - Hire dates range from 2020-01-01 to present (last 5 years)
-- Salary varies by department with ±$15-25K variance from base
+- Salary varies by department with +/-$15-25K variance from base
 - Performance scores use 5-point scale (2.0-5.0 actual range)
 - Hours worked represents monthly totals (typical range: 120-200)
 

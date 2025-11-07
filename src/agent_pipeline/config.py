@@ -4,6 +4,15 @@
 
 import os
 
+
+def _get_env_bool(env_name: str, default: bool) -> bool:
+    """Return boolean configuration sourced from environment variables."""
+    value = os.getenv(env_name)
+    if value is None:
+        return default
+    return value.strip().lower() in {"1", "true", "yes", "on"}
+
+
 # Get the project root directory
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -43,12 +52,9 @@ RAG_SEARCH_K = 6  # Number of chunks to retrieve
 EMBEDDINGS_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 
 # HuggingFace Configuration (Alternative to Ollama)
-# Uncomment and set USE_HUGGINGFACE = True to use HuggingFace models instead of Ollama
-# USE_HUGGINGFACE = False
-# HF_MODEL_NAME = "microsoft/DialoGPT-medium"  # Lightweight option
-# HF_MODEL_NAME = "codellama/CodeLlama-7b-Instruct-hf"  # Better for SQL/code
-# HF_MODEL_NAME = "WizardLM/WizardCoder-Python-7B-V1.0"  # Python/SQL focused
-# HF_DEVICE = "auto"  # "auto", "cuda", "cpu"
-# HF_MAX_NEW_TOKENS = 1024
-# HF_TEMPERATURE = 0.2
-# HF_TOP_P = 0.9
+USE_HUGGINGFACE = _get_env_bool("USE_HUGGINGFACE", False)
+HF_MODEL_NAME = os.getenv("HF_MODEL_NAME", "microsoft/DialoGPT-medium")
+HF_DEVICE = os.getenv("HF_DEVICE", "auto")  # "auto", "cuda", "cpu", "mps"
+HF_MAX_NEW_TOKENS = int(os.getenv("HF_MAX_NEW_TOKENS", str(OLLAMA_NUM_PREDICT)))
+HF_TEMPERATURE = float(os.getenv("HF_TEMPERATURE", str(OLLAMA_TEMPERATURE)))
+HF_TOP_P = float(os.getenv("HF_TOP_P", str(OLLAMA_TOP_P)))
