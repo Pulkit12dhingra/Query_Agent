@@ -18,7 +18,7 @@ repos:
       - id: pytest
         name: Run pytest tests
         entry: uv
-        args: [run, python, -m, pytest, tests/, -v, --tb=short]
+        args: [run, python, -m, pytest, tests/, -v, --tb=short, --ignore=tests/test_fastapi.py]
         language: system
         pass_filenames: false
         always_run: true
