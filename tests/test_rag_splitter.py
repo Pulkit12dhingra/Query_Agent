@@ -71,8 +71,8 @@ class TestTextSplitter:
             for i, doc in enumerate(test_docs):
                 chunks.extend(
                     [
-                        Document(page_content=f"Chunk 1 from doc {i+1}", metadata=doc.metadata),
-                        Document(page_content=f"Chunk 2 from doc {i+1}", metadata=doc.metadata),
+                        Document(page_content=f"Chunk 1 from doc {i + 1}", metadata=doc.metadata),
+                        Document(page_content=f"Chunk 2 from doc {i + 1}", metadata=doc.metadata),
                     ]
                 )
             mock_splitter.split_documents.return_value = chunks
@@ -127,7 +127,7 @@ class TestTextSplitter:
             # Mock splitting into 5 chunks
             chunks = []
             for i in range(5):
-                chunk_content = f"Chunk {i+1} content from large document"
+                chunk_content = f"Chunk {i + 1} content from large document"
                 chunks.append(
                     Document(page_content=chunk_content, metadata={"source": "large_doc"})
                 )
@@ -137,7 +137,7 @@ class TestTextSplitter:
 
             assert len(result) == 5
             for i, chunk in enumerate(result):
-                assert f"Chunk {i+1} content" in chunk.page_content
+                assert f"Chunk {i + 1} content" in chunk.page_content
                 assert chunk.metadata["source"] == "large_doc"
 
     def test_split_documents_preserves_metadata(self):
