@@ -147,18 +147,13 @@ jobs:
     - name: Install dependencies
       run: |
         uv sync --dev
-        uv add --dev coverage[toml]
+        uv add --dev pytest-cov
 
     - name: Run tests with coverage
       run: |
-        uv run coverage run -m pytest tests/
-        uv run coverage report --show-missing
-        uv run coverage xml
+        uv run pytest --cov --cov-branch --cov-report=xml tests/
 
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v5
       with:
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
