@@ -38,6 +38,18 @@ curl -X POST http://127.0.0.1:8000/query -H "Content-Type: application/json" \
 
 # Docker
 docker-compose up --build
+---
+
+## 🚧 In Progress: Major Update (dev)
+
+We are currently updating the codebase to:
+- Integrate [LangGraph](https://github.com/langchain-ai/langgraph) for agentic workflows
+- Use [MCP](https://github.com/microsoft/model-context-protocol) for advanced data querying
+- Implement a multi-retriever structure with ranking for improved retrieval and relevance
+
+These changes are under active development in the `feature-update` branch.
+
+Tags: `in progress`, `dev`
 ```
 
 ## Database Schema
