@@ -1,0 +1,11 @@
+Table: users
+Description: Core user dimension with signup data and geographic tie-in.
+Rows: 30
+
+Columns:
+- user_id (INTEGER) - Primary key.
+- first_name (TEXT) - User first name.
+- last_name (TEXT) - User last name.
+- email (TEXT) - Unique contact email.
+- country_id (INTEGER) - Country of residence.
+- signup_date (TEXT) - Date the account was created.

@@ -1,0 +1,11 @@
+Table: orders
+Description: Order fact table capturing monetary totals and order state.
+Rows: 35
+
+Columns:
+- order_id (INTEGER) - Primary key.
+- user_id (INTEGER) - Customer placing the order.
+- order_date (TEXT) - Date submitted.
+- total_amount (REAL) - Order total in transaction currency.
+- currency (TEXT) - Three-letter currency code.
+- status (TEXT) - Fulfillment lifecycle state.

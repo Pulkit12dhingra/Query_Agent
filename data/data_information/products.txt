@@ -1,0 +1,10 @@
+Table: products
+Description: Active product catalog used by the commerce flows.
+Rows: 12
+
+Columns:
+- product_id (INTEGER) - Primary key.
+- product_name (TEXT) - Display name.
+- category (TEXT) - High-level grouping.
+- unit_price (REAL) - Unit selling price.
+- availability_status (TEXT) - Inventory summary.

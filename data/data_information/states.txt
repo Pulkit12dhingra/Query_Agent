@@ -1,0 +1,10 @@
+Table: states
+Description: First-level administrative divisions for select countries.
+Rows: 20
+
+Columns:
+- state_id (INTEGER) - Primary key.
+- state_name (TEXT) - Name of the state or province.
+- country_id (INTEGER) - Links back to countries.country_id.
+- abbreviation (TEXT) - Postal-style short code.
+- state_capital (TEXT) - Administrative capital city.

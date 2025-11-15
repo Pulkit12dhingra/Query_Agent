@@ -1,0 +1,11 @@
+Table: user_profiles
+Description: Extended profile attributes that are optional for each user.
+Rows: 30
+
+Columns:
+- profile_id (INTEGER) - Primary key mirrors user_id.
+- user_id (INTEGER) - Foreign key to users.
+- birth_date (TEXT) - ISO-8601 birth date.
+- gender (TEXT) - Self-identified gender.
+- language_preference (TEXT) - Preferred communication language.
+- loyalty_tier (TEXT) - Reward tier assigned by CRM.

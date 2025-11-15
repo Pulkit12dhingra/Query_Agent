@@ -1,0 +1,12 @@
+Table: support_tickets
+Description: Support center issues raised by users after purchase.
+Rows: 15
+
+Columns:
+- ticket_id (INTEGER) - Primary key.
+- user_id (INTEGER) - Customer who opened the ticket.
+- issue_type (TEXT) - Categorized topic.
+- priority (TEXT) - Low/Medium/High severity.
+- status (TEXT) - Ticket workflow status.
+- created_at (TEXT) - Date opened.
+- resolved_at (TEXT) - Date resolved if applicable.

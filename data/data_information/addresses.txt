@@ -1,0 +1,12 @@
+Table: addresses
+Description: Physical mailing addresses captured for logistics workflows.
+Rows: 30
+
+Columns:
+- address_id (INTEGER) - Primary key.
+- user_id (INTEGER) - Owner of the address.
+- address_line1 (TEXT) - Street number and name.
+- city (TEXT) - City or locality.
+- state (TEXT) - State/region text.
+- postal_code (TEXT) - Postal or ZIP code.
+- country_id (INTEGER) - Country reference.

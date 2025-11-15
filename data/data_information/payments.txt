@@ -1,0 +1,11 @@
+Table: payments
+Description: Payment attempts/settlements for each order.
+Rows: 35
+
+Columns:
+- payment_id (INTEGER) - Primary key.
+- order_id (INTEGER) - Order covered by the payment.
+- payment_method (TEXT) - Instrument such as credit card or PayPal.
+- payment_date (TEXT) - Posted date.
+- payment_amount (REAL) - Amount collected.
+- payment_status (TEXT) - Clearing state.

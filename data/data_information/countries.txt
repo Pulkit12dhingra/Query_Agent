@@ -1,0 +1,10 @@
+Table: countries
+Description: Country dimension with ISO codes and macro statistics.
+Rows: 15
+
+Columns:
+- country_id (INTEGER) - Primary key.
+- country_name (TEXT) - Common name of the country.
+- iso_code (TEXT) - Two-letter ISO code used across the model.
+- region (TEXT) - Global region grouping.
+- population (INTEGER) - Latest rounded population estimate.

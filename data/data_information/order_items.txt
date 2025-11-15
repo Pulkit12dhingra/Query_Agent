@@ -1,0 +1,10 @@
+Table: order_items
+Description: Line-level breakdown of products included on each order.
+Rows: 35
+
+Columns:
+- order_item_id (INTEGER) - Primary key.
+- order_id (INTEGER) - Links to orders.
+- product_id (INTEGER) - Product that was purchased.
+- quantity (INTEGER) - Units purchased.
+- line_total (REAL) - Extended price for the line.
